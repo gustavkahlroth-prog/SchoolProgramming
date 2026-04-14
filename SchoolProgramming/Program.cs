@@ -83,7 +83,7 @@ while (true)
     Console.WriteLine(cursorPosX);
     Console.WriteLine(cursorPosY);
 }
-//helo guys
+
 //Find the deppest slot in the column that does NOT contain a 0 (or is last),
 //put user in turn´s number in the place over the first occupied one place
 //Check winning condition
