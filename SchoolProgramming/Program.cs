@@ -17,7 +17,7 @@ using System.Numerics;
 //++GLOBAL VARIBLES++
 Random rand = new Random();
 int[,] grid = new int[7, 7];
-bool playerTurn = false;
+int playerTurn = 1;
 int cursorPosX = 0;
 int cursorPosY = 0;
 
@@ -39,7 +39,7 @@ static void RenderGrid(int[,] grid, int posX, int posY)
     {
         for (int j = 0; j < grid.GetLength(1); j++)
         {
-           if (posY == i && posX == j)
+           if (posX == i && posY == j)
            {   
                Console.Write(">");
            }
@@ -49,12 +49,35 @@ static void RenderGrid(int[,] grid, int posX, int posY)
     }
 }
 
-//Changes value of the selected number
-static void ChangeValue(int[,] grid, int posX, int posY)
+int gridPosY = grid.GetLength(1) - 1;
+static void ChangeValue(int[,] grid, int posX, int posY, int playerTurn)
 {
-    grid[grid.GetLength(0)-1, posX] = 1;
+    //Uses some black magic to detect the lowest number on the selected column that is zero
+    //And then replaces it with whatever player number
+    if (grid[posX, posY] != 0)
+    {
+        posX--;
+        ChangeValue(grid, posX, posY, playerTurn);
+    }
+    else
+    {
+        grid[posX, posY] = playerTurn;
+    }
 }
 
+//Simple method to change which player's turn it is
+static int ChangePlayer(int playerTurn)
+{
+    if (playerTurn == 1)
+    {
+        return 2;
+    }
+    else if (playerTurn == 2)
+    {
+        return 1;
+    }
+    else { return 0; }
+}
 
 RenderGrid(grid, cursorPosX, cursorPosY);
 
@@ -65,26 +88,25 @@ while (true)
     switch (keyDetected)
     {
         case 'a':
-            cursorPosX--;
+            cursorPosY--;
             break;
         case 'd':
-            cursorPosX++;
+            cursorPosY++;
             break;
         case 'x':
-            ChangeValue(grid, cursorPosX, cursorPosY);
+            ChangeValue(grid, gridPosY, cursorPosY, playerTurn);
+            playerTurn = ChangePlayer(playerTurn);
             break;
         default:
             break;
     }
 
-    cursorPosX = (cursorPosX == -1) ? grid.GetLength(0)-1 : (cursorPosX % grid.GetLength(0));
-    cursorPosY = (cursorPosY == -1) ? grid.GetLength(1)-1 : (cursorPosY % grid.GetLength(1));
+    cursorPosY = (cursorPosY == -1) ? grid.GetLength(0)-1 : (cursorPosY % grid.GetLength(0));
     RenderGrid(grid, cursorPosX, cursorPosY);
-    Console.WriteLine(cursorPosX);
     Console.WriteLine(cursorPosY);
 }
 
-//Find the deppest slot in the column that does NOT contain a 0 (or is last),
+
 //put user in turn´s number in the place over the first occupied one place
 //Check winning condition
 //Loop back
