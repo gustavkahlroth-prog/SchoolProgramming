@@ -1,13 +1,4 @@
-﻿/*
-mrrp meow
-
-  /\ /\
- (() ())
-  /W W\
- /     \S
-*/
-
-using System;
+﻿using System;
 using System.Runtime.CompilerServices;
 using System.IO;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -16,15 +7,16 @@ using System.Numerics;
 
 //++GLOBAL VARIBLES++
 Random rand = new Random();
-int[,] grid = new int[7, 7];
+int[,] grid = new int[7,7];
+int gridPosX = grid.GetLength(1) - 1;
 int playerTurn = 1;
 int cursorPosX = 0;
 int cursorPosY = 0;
 
-//Fill the board
-for (int i = 0; i < grid.GetLength(0); i++)
+//Creates the grid
+for (int i = 0; i < grid.GetLength(1); i++)
 {
-    for (int j = 0; j < grid.GetLength(1); j++)
+    for (int j = 0; j < grid.GetLength(0); j++)
     {
         grid[i, j] = 0;
     }
@@ -35,9 +27,9 @@ static void RenderGrid(int[,] grid, int posX, int posY)
 {
     Console.Clear();
 
-    for (int i = 0; i < grid.GetLength(0); i++)
+    for (int i = 0; i < grid.GetLength(1); i++)
     {
-        for (int j = 0; j < grid.GetLength(1); j++)
+        for (int j = 0; j < grid.GetLength(0); j++)
         {
            if (posX == i && posY == j)
            {   
@@ -49,7 +41,6 @@ static void RenderGrid(int[,] grid, int posX, int posY)
     }
 }
 
-int gridPosY = grid.GetLength(1) - 1;
 static void ChangeValue(int[,] grid, int posX, int posY, int playerTurn)
 {
     //Uses some black magic to detect the lowest number on the selected column that is zero
@@ -81,20 +72,23 @@ static int ChangePlayer(int playerTurn)
 
 RenderGrid(grid, cursorPosX, cursorPosY);
 
-//Check user input To chose a column
+//Check user input to chose a column
 while (true)
 {
     var keyDetected = Console.ReadKey().KeyChar;
     switch (keyDetected)
     {
+        //move left
         case 'a':
             cursorPosY--;
             break;
+        //move right
         case 'd':
             cursorPosY++;
             break;
+        //insert value
         case 'x':
-            ChangeValue(grid, gridPosY, cursorPosY, playerTurn);
+            ChangeValue(grid, gridPosX, cursorPosY, playerTurn);
             playerTurn = ChangePlayer(playerTurn);
             break;
         default:
@@ -103,10 +97,20 @@ while (true)
 
     cursorPosY = (cursorPosY == -1) ? grid.GetLength(0)-1 : (cursorPosY % grid.GetLength(0));
     RenderGrid(grid, cursorPosX, cursorPosY);
-    Console.WriteLine(cursorPosY);
+    Console.WriteLine(playerTurn);
 }
 
+//aoi TODO list
+//Fix the grid only functioning as intended when it's a square like 3x3 or 7x7
+//but not when it's 3x7 or 7x3
 
-//put user in turn´s number in the place over the first occupied one place
-//Check winning condition
-//Loop back
+//Write an algorithm to detect the winning condition
+
+/*
+mrrp meow
+
+  /\ /\
+ (() ())
+  /W W\
+ /     \S
+*/
