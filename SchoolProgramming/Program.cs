@@ -7,16 +7,16 @@ using System.Numerics;
 
 //++GLOBAL VARIBLES++
 Random rand = new Random();
-int[,] grid = new int[7,7];
-int gridPosX = grid.GetLength(1) - 1;
+int[,] grid = new int[7,4];
+int gridPosX = grid.GetLength(0) - 1;
 int playerTurn = 1;
 int cursorPosX = 0;
 int cursorPosY = 0;
 
 //Creates the grid
-for (int i = 0; i < grid.GetLength(1); i++)
+for (int i = 0; i < grid.GetLength(0); i++)
 {
-    for (int j = 0; j < grid.GetLength(0); j++)
+    for (int j = 0; j < grid.GetLength(1); j++)
     {
         grid[i, j] = 0;
     }
@@ -27,9 +27,9 @@ static void RenderGrid(int[,] grid, int posX, int posY)
 {
     Console.Clear();
 
-    for (int i = 0; i < grid.GetLength(1); i++)
+    for (int i = 0; i < grid.GetLength(0); i++)
     {
-        for (int j = 0; j < grid.GetLength(0); j++)
+        for (int j = 0; j < grid.GetLength(1); j++)
         {
            if (posX == i && posY == j)
            {   
@@ -95,7 +95,7 @@ while (true)
             break;
     }
 
-    cursorPosY = (cursorPosY == -1) ? grid.GetLength(0)-1 : (cursorPosY % grid.GetLength(0));
+    cursorPosY = (cursorPosY == -1) ? grid.GetLength(1)-1 : (cursorPosY % grid.GetLength(1));
     RenderGrid(grid, cursorPosX, cursorPosY);
     Console.WriteLine(playerTurn);
 }
@@ -103,6 +103,8 @@ while (true)
 //aoi TODO list
 //Fix the grid only functioning as intended when it's a square like 3x3 or 7x7
 //but not when it's 3x7 or 7x3
+
+//STOP MIXING UP X AND Y AXIS PUH-LEAAAASE
 
 //Write an algorithm to detect the winning condition
 
